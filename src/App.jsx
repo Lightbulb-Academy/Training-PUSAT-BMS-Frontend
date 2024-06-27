@@ -1,5 +1,6 @@
 import "./App.css";
 import AddBook from "./components/addBook";
+import AddUser from "./components/addUser";
 import ErrorPage from "./components/errorPage";
 import Sidebar from "./components/sidebar";
 import { Routes, Route, Outlet } from "react-router-dom";
@@ -10,7 +11,8 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route index element={<AddBook />} />
         <Route path="/books" element={<AddBook />} />
-        {/* TODO: Add user path*/}
+        <Route path="/users" element={<AddUser />} />
+        {/* TODO: Add reservation path*/}
 
         {/* 
           Using path="*"" means "match anything", so this route

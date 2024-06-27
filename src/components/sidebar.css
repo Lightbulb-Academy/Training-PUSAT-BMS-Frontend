@@ -23,6 +23,7 @@
   height: 60px;
   text-decoration: none;
   color: white;
+  align-items: center;
 }
 
 .active {
