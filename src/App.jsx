@@ -1,7 +1,8 @@
 import "./App.css";
-import AddBook from "./components/addBook";
+import AddOrUpdateBooks from "./components/addBook";
 import AddUser from "./components/addUser";
 import DisplayBook from "./components/displayBooks";
+import DisplayUser from "./components/displayUsers";
 import ErrorPage from "./components/errorPage";
 import Sidebar from "./components/sidebar";
 import { Routes, Route, Outlet } from "react-router-dom";
@@ -10,10 +11,13 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route index element={<AddBook />} />
-        <Route path="/books/add" element={<AddBook />} />
-        <Route path="/users" element={<AddUser />} />
+        <Route index element={<AddOrUpdateBooks />} />
         <Route path="/books" element={<DisplayBook />} />
+        <Route path="/books/add" element={<AddOrUpdateBooks />} />
+        <Route path="/books/add/:id" element={<AddOrUpdateBooks />} />
+        <Route path="/users" element={<DisplayUser />} />
+        <Route path="/users/add" element={<AddUser />} />
+
         {/* TODO: Add reservation path*/}
 
         {/* 
