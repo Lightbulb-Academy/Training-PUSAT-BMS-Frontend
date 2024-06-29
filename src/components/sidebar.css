@@ -18,12 +18,13 @@
 
 .sidebar-item {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   font-size: 24px;
   height: 60px;
   text-decoration: none;
   color: white;
   align-items: center;
+  padding-left: 16px;
 }
 
 .active {

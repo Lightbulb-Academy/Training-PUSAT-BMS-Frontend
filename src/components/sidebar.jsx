@@ -8,6 +8,7 @@ function Sidebar() {
       <div>
         <NavLink to="/books" className="sidebar-item">Books</NavLink>
         <NavLink to="/users" className="sidebar-item">Users</NavLink>
+        <NavLink to="/reservations" className="sidebar-item">Resevation</NavLink>
       </div>
     </div>
   )
