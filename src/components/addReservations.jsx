@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const AddOrUpdateReservation = () => {
   const [users, setUsers] = useState([]);
@@ -82,7 +82,7 @@ const AddOrUpdateReservation = () => {
           required
         >
           <option value="">Select a book</option>
-          {books.map((book) => (
+          {books.filter(book => book.isAvailable).map((book) => (
             <option key={book.id} value={book.id}>
               {book.title}
             </option>

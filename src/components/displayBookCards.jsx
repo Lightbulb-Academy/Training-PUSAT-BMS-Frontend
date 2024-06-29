@@ -2,14 +2,12 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // 1
 import "./displayBook.css";
 import { toast } from "react-toastify";
-import CustomModal from "./customModal";
+import Modal from "react-modal";
 
-function DisplayBook() {
+function DisplayBookCards() {
   const [books, setBooks] = useState([]);
-  const [isDeleteOpen, setDeleteOpen] = useState(false);
-  // const [infoModalOpen, setInfoModalOpen] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
   const [bookId, setBookId] = useState(null);
-  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate(); // 2
 
@@ -39,19 +37,25 @@ function DisplayBook() {
         method: "DELETE",
       });
       if (!response.ok) {
-        throw await response.json();
+        throw response;
       }
-      setDeleteOpen(false);
+      setModalOpen(false);
       fetchAllBooks();
       toast("Book deleted successfully!", { type: "success" });
     } catch (error) {
       console.log(error);
-      if (error.statusCode === 400) {
-        // setInfoModalOpen(true);
-        // setDeleteOpen(false);
-        setErrorMessage(error.message);
-      }
     }
+  };
+
+  const customStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+    },
   };
 
   return (
@@ -63,28 +67,18 @@ function DisplayBook() {
           + Add New Book
         </button>
       </div>
-      <table border={1}>
-        <thead>
-          <tr>
-            <th>SN</th>
-            <th>Title</th>
-            <th>ISBN</th>
-            <th>Year</th>
-            <th>Is Avaiblable?</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {books?.map((book) => {
-            return (
-              <tr key={book.id}>
-                <td>{book.id}</td>
-                <td>{book.title}</td>
-                <td>{book.isbn}</td>
-                <td>{book.year}</td>
-                <td>{book.is_available ? "Yes" : "No"}</td>
-                <td>
-                  <div
+
+      <div className="flex gap-4">
+        {books.map((book) => {
+          return (
+            <div key={book.id} className={`w-[120px] h-[120px] flex flex-col rounded-md shadow-md text-center justify-around ${book.isAvailable ? "bg-white": "bg-gray-300"}`}>
+              <p className="text-xl">{book.title}</p>
+              <div className="flex w-full justify-center gap-2">
+                <p className="text-sm">{book.isbn}</p>
+                <p className="text-sm">{book.year}</p>
+              </div>
+              <div
+                className="bg-gray-100 py-2"
                     style={{
                       display: "flex",
                       gap: 8,
@@ -99,43 +93,42 @@ function DisplayBook() {
                       Edit
                     </p>
                     <p
-                      style={{ color: "blue", cursor: "pointer" }}
+                      style={{ color: "red", cursor: "pointer" }}
                       onClick={() => {
-                        setErrorMessage("")
-                        setDeleteOpen(true);
+                        setModalOpen(true);
                         setBookId(book.id);
-                      }}
+                    }}
                     >
                       Delete
                     </p>
                   </div>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-
-      <CustomModal
-        isModalOpen={isDeleteOpen}
-        setModalOpen={setDeleteOpen}
-        hasDelete={!errorMessage}
-        bookId={bookId}
-        handleDelete={handleDelete}
-      >
-        {!errorMessage ? (
-          <>
-            <h3 className="text-base font-bold">Delete Book</h3>
-            <p>Are you sure? This will delete the book permanantly</p>
-          </>
-        ) : (
-          <>
-            <p>{errorMessage}</p>
-          </>
-        )}
-      </CustomModal>
+            </div>
+          );
+        })}
+      </div>
+      <Modal isOpen={isModalOpen} style={customStyles} ariaHideApp={false}>
+        <h3>Are you sure? This will delete the book permanantly.</h3>
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: 16 }}>
+          <button
+            style={{
+              backgroundColor: "white",
+              color: "black",
+              cursor: "pointer",
+            }}
+            onClick={() => setModalOpen(false)}
+          >
+            Cancel
+          </button>
+          <button
+            style={{ backgroundColor: "red", cursor: "pointer" }}
+            onClick={() => handleDelete(bookId)}
+          >
+            Delete
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 }
 
-export default DisplayBook;
+export default DisplayBookCards;
