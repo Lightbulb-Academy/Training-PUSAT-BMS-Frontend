@@ -1,8 +1,11 @@
-/* eslint-disable react/prop-types */
+import { useContext } from "react";
 import Modal from "react-modal";
+import { ModalContext } from "../context/modalContext";
+import PropTypes from "prop-types";
 
 function CustomModal(props) {
-  const { isModalOpen, setModalOpen, hasDelete, handleDelete, bookId } = props;
+  const { hasDelete, handleDelete, bookId } = props;
+  const { isOpen, setIsOpen } = useContext(ModalContext);
 
   const customStyles = {
     content: {
@@ -17,7 +20,7 @@ function CustomModal(props) {
   };
 
   return (
-    <Modal isOpen={isModalOpen} style={customStyles} ariaHideApp={false}>
+    <Modal isOpen={isOpen} style={customStyles} ariaHideApp={false}>
       {props.children}
       <div style={{ display: "flex", justifyContent: "flex-end", gap: 16, marginTop: 16 }}>
         <button
@@ -26,7 +29,7 @@ function CustomModal(props) {
             color: "black",
             cursor: "pointer",
           }}
-          onClick={() => setModalOpen(false)}
+          onClick={() => setIsOpen(false)}
         >
           Cancel
         </button>
@@ -44,3 +47,10 @@ function CustomModal(props) {
 }
 
 export default CustomModal;
+
+CustomModal.propTypes = {
+  hasDelete: PropTypes.bool,
+  handleDelete: PropTypes.func,
+  bookId: PropTypes.number,
+  children: PropTypes.node
+}

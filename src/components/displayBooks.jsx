@@ -1,15 +1,18 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // 1
 import "./displayBook.css";
 import { toast } from "react-toastify";
 import CustomModal from "./customModal";
+import { ModalContext } from "../context/modalContext";
 
 function DisplayBook() {
   const [books, setBooks] = useState([]);
-  const [isDeleteOpen, setDeleteOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
   // const [infoModalOpen, setInfoModalOpen] = useState(false);
   const [bookId, setBookId] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const { setIsOpen } = useContext(ModalContext)
 
   const navigate = useNavigate(); // 2
 
@@ -41,14 +44,14 @@ function DisplayBook() {
       if (!response.ok) {
         throw await response.json();
       }
-      setDeleteOpen(false);
+      setIsOpen(false);
       fetchAllBooks();
       toast("Book deleted successfully!", { type: "success" });
     } catch (error) {
       console.log(error);
       if (error.statusCode === 400) {
         // setInfoModalOpen(true);
-        // setDeleteOpen(false);
+        // setIsOpen(false);
         setErrorMessage(error.message);
       }
     }
@@ -102,7 +105,7 @@ function DisplayBook() {
                       style={{ color: "blue", cursor: "pointer" }}
                       onClick={() => {
                         setErrorMessage("")
-                        setDeleteOpen(true);
+                        setIsOpen(true);
                         setBookId(book.id);
                       }}
                     >
@@ -117,8 +120,6 @@ function DisplayBook() {
       </table>
 
       <CustomModal
-        isModalOpen={isDeleteOpen}
-        setModalOpen={setDeleteOpen}
         hasDelete={!errorMessage}
         bookId={bookId}
         handleDelete={handleDelete}
